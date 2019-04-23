@@ -1335,7 +1335,7 @@ class Bot : TelegramLongPollingBot() {
     fun connection(user_id: Long, message_text: String) {
 
         var i = 0
-        var j = 0
+        var j = 0 //hh
 
         println("Array : ${partner_searchJ.size}  ${partner_searchM.size}")
         if (partner_searchJ.size != 0 && partner_searchM.size !=0) {
