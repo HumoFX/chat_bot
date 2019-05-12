@@ -102,6 +102,7 @@ class Bot : TelegramLongPollingBot() {
                     users_pos.put(database[i][0].toLong(),database[i][3].toInt())
                     user_lang.put(database[i][0].toLong(),database[i][5].toInt())
                     profile.put(database[i][0].toLong(),database[i][4])
+                    user_banned.put(database[i][0].toLong(),database[i][6].toInt())
                 }
 
 
@@ -272,27 +273,68 @@ class Bot : TelegramLongPollingBot() {
 
                 val tmp = users.get(user_id)
                 val tmp2 = users_pos.get(user_id)
-               if(tmp=="male"||tmp=="female")
+                val tmp3 = user_banned.get(user_id)
+                if(tmp3==1)
                 {
-                    if (tmp2==0)
+                    var text = "ВЫ ЗАБАНЕНЫ!"
+                    var lang = user_lang.get(user_id)
+                    if(lang!=null)
                     {
-                        button_group_0(message_text, user_id)
-             //           users_pos.remove(user_id)
-                    }
-                    if (tmp2==1)
-                    {
-                        button_group_1(message_text, user_id)
-            //            users_pos.remove(user_id)
+                        if(lang==0)
+                        {
 
+                        }
+                        if(lang==1)
+                        {
+                            text="Proflingiz BANlangan!"
+                        }
+                        if(lang==2)
+                        {
+                            text = "YOU WERE BANNED"
+                        }
+                        val message = SendMessage() // Create a message object object
+                                .setChatId(chat_id)
+                                .setParseMode("Markdown")
+                                .setText("$text")
+                        try {
+                            execute(message) // Sending our message object to user
+                        } catch (e: TelegramApiException) {
+                            e.printStackTrace()
+                        }
                     }
-                    if (tmp2==2)
-                    {
-                        button_group_2(message_text, user_id)
-              //          users_pos.remove(user_id)
+                }
+                else {
+                    if (tmp == "male" || tmp == "female") {
+                        if (tmp2 == 0)
+                        {
+                            button_group_0(message_text, user_id)
+                            if (user_id.toInt() == 299384140) {
+                                button_group_4(message_text, user_id)
+                            }
+                            //           users_pos.remove(user_id)
+                        }
+                        if (tmp2 == 1) {
+                            button_group_1(message_text, user_id)
+                            //            users_pos.remove(user_id)
+
+                        }
+                        if (tmp2 == 2) {
+                            button_group_2(message_text, user_id)
+                            //          users_pos.remove(user_id)
+                        }
+                        if (tmp2 == 3) {
+                            ban(user_id, message_text)
+                        }
+                        if (tmp2 == 4) {
+                            unban(user_id, message_text)
+                        }
+                        if (tmp2 == 5) {
+                            warning(user_id, message_text)
+                        }
+                        println("userposremove ${users_pos.keys}  ${users_pos.values}")
+                        connection(user_id, message_text)
+                        connected(user_id, message_text, user_firstname)
                     }
-                    println("userposremove ${users_pos.keys}  ${users_pos.values}")
-                    connection(user_id, message_text)
-                    connected(user_id, message_text, user_firstname)
                 }
 
                 log(
@@ -375,7 +417,7 @@ class Bot : TelegramLongPollingBot() {
                         e.printStackTrace()
                     }
                 }
-                if(call_data!="male"&&call_data!="feamle") {
+                if(call_data!="male"&&call_data!="female") {
                     var gender = users.get(chat_id)
                     var position = users_pos.get(chat_id)
                     var lang = user_lang.get(chat_id)
@@ -387,7 +429,7 @@ class Bot : TelegramLongPollingBot() {
                                 if(position==0)
                                 {
                                     profile.put(chat_id, emojies[i])
-                                    abc.write(chat_id, gender, 0, "${emojies[i]}",lang)
+                                    abc.write(chat_id, gender, 0, "${emojies[i]}",lang,0)
                                     join(chat_id)
                                 }
                                 if(position==2)
@@ -694,8 +736,127 @@ class Bot : TelegramLongPollingBot() {
 
     }
 
+    fun ban(user_id: Long,message_text: String)
+    {
+        var text = "ВЫ ЗАБАНЕНЫ ЗА НЕ СОБЛЮДЕНИЕ ПРАВИЛ ЧАТА"
+        var lang = user_lang.get(message_text.toLong())
+        if(lang!=null)
+        {
+            if(lang==0)
+            {
+
+            }
+            if(lang==1)
+            {
+                text="Sizning profilingiz Chat ko'rsatmalariga rioya qilmaslik sababi bo'yicha BANlandi "
+            }
+            if(lang==2)
+            {
+                text = "YOU ARE BANNED FOR THE NON-COMPLIANCE OF CHAT RULES"
+            }
+        }
+        val message = SendMessage()
+                .setChatId(message_text)
+                .setParseMode("Markdown")
+                .setText("*${text}*")
+        try {
+            execute(message)
+            //      execute(delmessage)
+        }
+        catch (e: TelegramApiException){
+            e.printStackTrace()
+        }
+        user_banned.put(message_text.toLong(),1)
+        abc.update_ban(message_text.toLong(),1)
+        join(user_id)
+
+    }
+
+    fun unban(user_id: Long,message_text: String)
+    {
+        var text = "ВЫ РАЗБАНЕНЫ"
+        var lang = user_lang.get(message_text.toLong())
+        if(lang!=null)
+        {
+            if(lang==0)
+            {
+
+            }
+            if(lang==1)
+            {
+                text="BANDAN OZOD BO'LDINGIZ "
+            }
+            if(lang==2)
+            {
+                text = "YOU ARE UNBANNED"
+            }
+        }
+        val message = SendMessage()
+                .setChatId(message_text)
+                .setParseMode("Markdown")
+                .setText("*$text*")
+        try {
+            execute(message)
+            //      execute(delmessage)
+        }
+        catch (e: TelegramApiException){
+            e.printStackTrace()
+        }
+        if(user_banned.containsKey(message_text.toLong()))
+        {
+            user_banned.put(message_text.toLong(), 0)
+            abc.update_ban(message_text.toLong(), 0)
+
+        }
+        else{
+            val message = SendMessage()
+                    .setChatId(user_id)
+                    .setParseMode("Markdown")
+                    .setText("*Нет в списке забаненных*")
+            try {
+                execute(message)
+                //      execute(delmessage)
+            }
+            catch (e: TelegramApiException){
+                e.printStackTrace()
+            }
+        }
+        join(user_id)
 
 
+    }
+    fun warning(user_id: Long,message_text: String)
+    {
+        var text = "*АДМИНИСТРАЦИЯ БОТА ПРЕДУПРЕЖДАЕТ ВАС О ТОМ, ЧТО ВЫ НАРУШИЛИ ПРАВИЛА БОТА!!!ПРИ ПОСЛЕДУЮЩИХ НАРУШЕНИЙ ВАС МОГУТ ЗАБАНИТЬ НА ОПРЕДЕЛЕННЫЙ СРОК!*"
+        var lang = user_lang.get(message_text.toLong())
+        if(lang!=null)
+        {
+            if(lang==0)
+            {
+
+            }
+            if(lang==1)
+            {
+                text="BOT ADMINISTRATSIYASI SIZNI BOT QOIDALARINI BUZGANLIGINGIZ XAQIDA OGOHLANTIRADI!!!QOIDALARGA RIOYA QILMASLIK NATIJASIDA BAN HOLATIGA TUSHUSHINGIZ MUMKIN! "
+            }
+            if(lang==2)
+            {
+                text = "BOT's ADMINISTRATION WARNS YOU ABOUT THAT YOU HAVE VIOLATED THE BOT's RULES !!! THROUGH SUBSEQUENT VIOLATIONS YOU MAY BE BANNED FOR A DEFINED TIME!"
+            }
+        }
+        var message =SendMessage()
+                .setChatId("${message_text.toLong()}")
+                .setParseMode("Markdown")
+                .setText("$text")
+        try {
+            execute(message)
+        }
+        catch (e: TelegramApiException){
+            e.printStackTrace()
+        }
+        join(user_id)
+
+    }
     fun join(user_id: Long){
         var text = "Начните общение"
         var button_text1 = "Найти собеседника \uD83D\uDD0E"
@@ -886,6 +1047,10 @@ class Bot : TelegramLongPollingBot() {
 
     }
 
+    fun admin_ban(message_text: String)
+    {
+        user_banned.put(message_text.toLong(),1)
+    }
 
 
     private fun button_group_0(message_text: String, user_id: Long) {
@@ -1044,15 +1209,34 @@ class Bot : TelegramLongPollingBot() {
                 "$button_text3"->
                 {
                     //Здесь будут правила
+                    var message = SendMessage()
+                            .setChatId(user_id)
+                            .setText("В стадии разработки!")
+                    try {
+                        execute(message)
+                    }
+                    catch (e:TelegramApiException)
+                    {
+                        e.printStackTrace()
+                    }
                 }
                 "$button_text4"->
                 {
                     //Связь с админами
+                    var message = SendMessage()
+                            .setChatId(user_id)
+                            .setText("В стадии разработки!")
+                    try {
+                        execute(message)
+                    }
+                    catch (e:TelegramApiException)
+                    {
+                        e.printStackTrace()
+                    }
                 }
             }
 
     }
-
     private fun button_group_1 (message_text: String, user_id: Long)
     {
         var button_text1 = "Остановить поиск ❌"
@@ -1144,7 +1328,7 @@ class Bot : TelegramLongPollingBot() {
         var gender = users.get(user_id)
             when(message_text)
             {
-                "\uD83C\uDDF7\uD83C\uDDFA\uD83D\uDD04\uD83C\uDDFA\uD83C\uDDFF"->
+                "\uD83C\uDDF7\uD83C\uDDFA\uD83D\uDD04\uD83C\uDDFA\uD83C\uDDFF\uD83D\uDD04\uD83C\uDDEC\uD83C\uDDE7"->
                 {
                     language(user_id)
                 }
@@ -1309,26 +1493,46 @@ class Bot : TelegramLongPollingBot() {
         {
             "BAN"->
             {
-                user_banned.put(message_text.toLong(),1)
+                users_pos.replace(user_id,3)
+                abc.update(user_id,3)
+                val message =SendMessage()
+                        .setChatId(user_id)
+                        .setText("Введите user_id")
+                try {
+                    execute(message) // Sending our message object to user
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }
+
             }
             "UNBAN"->
             {
-                user_banned.remove(message_text.toLong())
+                users_pos.replace(user_id,4)
+                abc.update(user_id,4)
+                val message =SendMessage()
+                        .setChatId(user_id)
+                        .setText("Введите user_id")
+                try {
+                    execute(message) // Sending our message object to user
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }
+
 
             }
             "WARNING"->
             {
-                var text = "*АДМИНИСТРАЦИЯ БОТА ПРЕДУПРЕЖДАЕТ ВАС О ТОМ, ЧТО ВЫ НАРУШИЛИ ПРАВИЛА БОТА!!!ПРИ ПОСЛЕДУЮЩИХ НАРУШЕНИЙ ВАС МОГУТ ЗАБАНИТЬ НА ОПРЕДЕЛЕННЫЙ СРОК!*"
-                var message =SendMessage()
-                        .setChatId("${message_text.toLong()}")
-                        .setParseMode("Markdown")
-                        .setText("$text")
+                users_pos.replace(user_id,5)
+                abc.update(user_id,5)
+                val message = SendMessage()
+                        .setChatId(user_id)
+                        .setText("Введите user_id для отправки предупреждения")
                 try {
-                    execute(message)
-                }
-                catch (e: TelegramApiException){
+                    execute(message) // Sending our message object to user
+                } catch (e: TelegramApiException) {
                     e.printStackTrace()
                 }
+
             }
         }
     }
