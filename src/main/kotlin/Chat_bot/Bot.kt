@@ -3,25 +3,20 @@ package Chat_bot
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import java.text.SimpleDateFormat
 import java.util.*
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import java.util.ArrayList
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
 import java.io.*
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.stream.Collectors
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.io.InputStream
+import kotlin.collections.ArrayList
+
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
 
 
 
@@ -51,6 +46,8 @@ class Bot : TelegramLongPollingBot() {
     var file_nameM : MutableMap<Long,Int> = hashMapOf()
     var file_nameJ : MutableMap<Long,Int> = hashMapOf()
     var user_banned : MutableMap<Long,Int> = hashMapOf()
+    var user_referals : MutableMap<Long,Int> = hashMapOf()
+    var user_registor: MutableMap<Long,Int> = hashMapOf()
     var file_iterator = 0
     var male_size = 0
     var female_size = 0
@@ -64,7 +61,7 @@ class Bot : TelegramLongPollingBot() {
     var emoji_change = 0
   //  var h = abc.CREATE()
   //  var h1 = abc.CREATE1()
-    var spam_text: Array<Array<String>> = Array(1000,{ Array(10000,{"0"}) })
+    var users_map: MutableMap<Long,Array<String>> = hashMapOf()
     var spam_iterator = arrayListOf<Int>(1000)
     val database_size = database[0][2].toInt()
     val database_search_size = database_search[0][2].toInt()
@@ -103,6 +100,8 @@ class Bot : TelegramLongPollingBot() {
                     user_lang.put(database[i][0].toLong(),database[i][5].toInt())
                     profile.put(database[i][0].toLong(),database[i][4])
                     user_banned.put(database[i][0].toLong(),database[i][6].toInt())
+                    user_referals.put(database[i][0].toLong(),database[i][7].toInt())
+                    users_map.put(database[i][0].toLong(),database[i])
                 }
 
 
@@ -206,6 +205,7 @@ class Bot : TelegramLongPollingBot() {
         if (update != null) {
 
             if (update.hasMessage() && update.message.hasText()) {
+
                 val user_id = update.message.chatId
                 var message_text = update.message.text
                 var message_id = update.message.messageId
@@ -226,8 +226,7 @@ class Bot : TelegramLongPollingBot() {
                // if (update.hasMessage() && update.message.hasText()) {
                 //    val message_text = update.message.text
                     val chat_id = update.message.chatId
-                    if (update.message.text.equals("/start")) {
-
+                    if (update.message.text.startsWith("/start")) {
                         if(users.contains(user_id))
                         {
                             var lang = user_lang.get(user_id)
@@ -263,6 +262,7 @@ class Bot : TelegramLongPollingBot() {
                         else
                         {
                             language(user_id)
+                            parse_link(message_text)
                         }
 
                     } else {
@@ -348,10 +348,22 @@ class Bot : TelegramLongPollingBot() {
             }
 
 
+
             if (update.hasCallbackQuery()) {
                 // Set variables
+                val answer = AnswerCallbackQuery()
+                answer.callbackQueryId = update.callbackQuery.id
+                answer.text = "Принято!!"
+                answer.showAlert = true
+                try {
+                    execute(answer)
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }
+
                 val call_data = update.callbackQuery.data
                 val chat_id = update.callbackQuery.message.chatId
+                val message_text = update.callbackQuery.message.text
                 val message_id = update.callbackQuery.message.messageId
                 if (call_data == "male")
                 {
@@ -375,8 +387,12 @@ class Bot : TelegramLongPollingBot() {
                         all_size++
                         println("UV : ${users.values}  UK : ${users.keys}")
                     }
+
                     users.put(chat_id ,"male" )
-                    profile_emojiM(chat_id)
+
+                        user_referals.put(chat_id, 0)
+                        profile_emojiM(chat_id)
+
 
                     val new_message = DeleteMessage()
                             .setChatId(chat_id)
@@ -395,6 +411,7 @@ class Bot : TelegramLongPollingBot() {
                                 .setParseMode("Markdown")
                                 .setText("_Можете переходить к общению_ ")
                         try {
+
                             execute(message) // Sending our message object to user
                         } catch (e: TelegramApiException) {
                             e.printStackTrace()
@@ -407,6 +424,7 @@ class Bot : TelegramLongPollingBot() {
                         println("UV : ${users.values}  UK : ${users.keys}")
                     }
                     users.put(chat_id,"female")
+                    user_referals.put(chat_id,0)
                     profile_emojiJ(chat_id)
                     val new_message = DeleteMessage()
                             .setChatId(chat_id)
@@ -428,8 +446,15 @@ class Bot : TelegramLongPollingBot() {
                             if (gender != null&&lang!=null) {
                                 if(position==0)
                                 {
+                                    user_registor.put(chat_id,0)
+                                    var test=user_registor.get(chat_id)
+                                    if(test==0)
+                                    {
                                     profile.put(chat_id, emojies[i])
-                                    abc.write(chat_id, gender, 0, "${emojies[i]}",lang,0)
+                                    abc.write(chat_id, gender, 0, "${emojies[i]}",lang,0,0)
+                                    user_registor.replace(chat_id,1)
+                                    }
+
                                     join(chat_id)
                                 }
                                 if(position==2)
@@ -716,11 +741,15 @@ class Bot : TelegramLongPollingBot() {
         val keyboard = ArrayList<KeyboardRow>()
         val keyboardFirstRow = KeyboardRow()
         val keyboardSecondRow = KeyboardRow()
+        val keyboardThirdRow = KeyboardRow()
         keyboardFirstRow.add(KeyboardButton("\uD83C\uDDF7\uD83C\uDDFA\uD83D\uDD04\uD83C\uDDFA\uD83C\uDDFF\uD83D\uDD04\uD83C\uDDEC\uD83C\uDDE7 "))
         keyboardFirstRow.add(KeyboardButton("$emoji"))
-        keyboardSecondRow.add(KeyboardButton("\uD83D\uDD19"))
+        keyboardSecondRow.add(KeyboardButton("Баланс"))
+        keyboardSecondRow.add(KeyboardButton("Реф. линк"))
+        keyboardThirdRow.add(KeyboardButton("\uD83D\uDD19"))
         keyboard.add(keyboardFirstRow)
         keyboard.add(keyboardSecondRow)
+        keyboard.add(keyboardThirdRow)
         replyKeyboardMarkup.keyboard = keyboard
         try {
             execute(sendMessage)
@@ -1047,11 +1076,97 @@ class Bot : TelegramLongPollingBot() {
 
     }
 
-    fun admin_ban(message_text: String)
+    fun referal(user_id: Long)
     {
-        user_banned.put(message_text.toLong(),1)
+        var iter = user_referals.get(user_id)
+        var text = "Вы пригласили $iter рефералов\n Скопируйте эту ссылку. и отправьте своим друьям. За каждого приглашенного вы получите 2.5-endorphins.1-endorphin - это криптовалюта в нашем боте.Вы можете её копить и обменять на реальные деньги. Курс валют:\n1-endorphin = 75 sum \n1-endorphin = 0,5 rub \n Минимальный вывод с 50-endorphins "
+        var message = SendMessage()
+                .setChatId(user_id)
+                .setText("$text"+"\n t.me/Hum0bot?start=${user_id}")
+        try {
+            execute(message)
+        }
+        catch (e: TelegramApiException){
+            e.printStackTrace()
+        }
     }
+    fun parse_link(message_text: String)
+    {
+        if(message_text.startsWith("/start ")) {
+            var get_user_id = message_text
+            var time = get_user_id.substring(7)
+            println("GETUSERID= ${time}")
+            var iter = user_referals.get(time.toLong())
+            if (iter != null) {
+                user_referals.replace(time.toLong(), iter.plus(1))
+                abc.update_referal(time.toLong(), iter + 1)
+            }
 
+            var text = "Вы получили 2.5endorphins за приглашение участника"
+            var message = SendMessage()
+                    .setChatId(time)
+                    .setText(text)
+            try {
+                execute(message)
+            } catch (e: TelegramApiException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun balans (user_id: Long,message_text: String)
+    {
+
+        var iter=user_referals.get(user_id)
+        var coin=0.0
+        if(iter!=null)
+        {
+            coin=iter*2.5
+        }
+
+        var text="\"Ваш баланс составляет $coin endorphins\\n Для вывода необходимо 50 endorphins\""
+        var button_text1 = "Вывод руб"
+        var button_text2 = "Вывод сум"
+        var lang = user_lang.get(user_id)
+        if(lang!=null)
+        {
+            if(lang==0)
+            {
+
+            }
+            if(lang==1)
+            {
+                text="*Аноним чатимизга хуш келибсиз!*"+ "\n_Жинсингизни танланг:_"
+                button_text1="Эркак \uD83D\uDC81\u200D♂️"
+                button_text2="Айол \uD83D\uDC81\u200D♀️"
+            }
+            if(lang==2)
+            {
+                text = "*Welcome to our anonymous chat* "+ "\n_Choose ur gender:_"
+                button_text1 = "Male \uD83D\uDC81\u200D♂️"
+                button_text2 = "Female \uD83D\uDC81\u200D♀️"
+            }
+        }
+
+        val message = SendMessage() // Create a message object object
+                .setChatId(user_id)
+                .setParseMode("Markdown")
+                .setText("$text")
+        val markupInline = InlineKeyboardMarkup()
+        val rowsInline = ArrayList<List<InlineKeyboardButton>>()
+        val rowInline = ArrayList<InlineKeyboardButton>()
+        rowInline.add(InlineKeyboardButton().setText("$button_text1").setCallbackData("rub"))
+        rowInline.add(InlineKeyboardButton().setText("$button_text2").setCallbackData("sum"))
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline)
+        // Add it to the message
+        markupInline.keyboard = rowsInline
+        message.replyMarkup = markupInline
+        try {
+            execute(message) // Sending our message object to user
+        } catch (e: TelegramApiException) {
+            e.printStackTrace()
+        }
+    }
 
     private fun button_group_0(message_text: String, user_id: Long) {
         var button_text1 = "Найти собеседника \uD83D\uDD0E"
@@ -1209,6 +1324,7 @@ class Bot : TelegramLongPollingBot() {
                 "$button_text3"->
                 {
                     //Здесь будут правила
+
                     var message = SendMessage()
                             .setChatId(user_id)
                             .setText("В стадии разработки!")
@@ -1225,7 +1341,8 @@ class Bot : TelegramLongPollingBot() {
                     //Связь с админами
                     var message = SendMessage()
                             .setChatId(user_id)
-                            .setText("В стадии разработки!")
+                            .setParseMode("Markdown")
+                            .setText("*Пройдите по*"+ " [ссылке](t.me/ChatRuletka2bot?start) "+ "*для связи с нами* ")
                     try {
                         execute(message)
                     }
@@ -1346,6 +1463,17 @@ class Bot : TelegramLongPollingBot() {
                     else{
                         profile_emojiJ(user_id)
                     }
+                }
+                "Баланс"->
+                {
+                    var test = users_map.get(user_id)
+                    if (test!=null){
+                    println("TEST ${test[1]}")}
+                }
+                "Реф. линк"->
+                {
+                    referal(user_id)
+
                 }
             }
 

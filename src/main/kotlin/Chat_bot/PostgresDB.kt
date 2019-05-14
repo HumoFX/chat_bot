@@ -63,7 +63,7 @@ open class PostgreSQLJDBC {
         println("Table created successfully")
     }
 
-    open fun write(user_id: Long, text: String,position: Int,profilename:String,language:Int,banned:Int) {
+    open fun write(user_id: Long, text: String,position: Int,profilename:String,language:Int,banned:Int,referal:Int) {
         var c: Connection? = null
         var stmt: Statement? = null
         try {
@@ -76,9 +76,9 @@ open class PostgreSQLJDBC {
             stmt = c.createStatement()
             var sql: String
             if (text == "male") {
-                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY) " + "VALUES ($user_id,'male',$position,0,$language,$banned,0,0,0,'PUSTO','$profilename','PUSTO','PUSTO');"
+                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY) " + "VALUES ($user_id,'male',$position,0,$language,$banned,0,0,$referal,'PUSTO','$profilename','PUSTO','PUSTO');"
             } else {
-                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY) " + "VALUES ($user_id,'female',$position,0,$language,$banned,0,0,0,'PUSTO','$profilename','PUSTO','PUSTO');"
+                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY) " + "VALUES ($user_id,'female',$position,0,$language,$banned,0,0,$referal,'PUSTO','$profilename','PUSTO','PUSTO');"
             }
             stmt.executeUpdate(sql)
 
@@ -123,12 +123,14 @@ open class PostgreSQLJDBC {
                     val profilename = rs.getString("profilename")
                     val language = rs.getInt("language")
                     val banned = rs.getInt("spamlist")
+                    var referal = rs.getInt("referal")
                     temp[t][0] = id.toString()
                     temp[t][1] = gender
                     temp[t][3] = position.toString()
                     temp[t][4] = profilename
                     temp[t][5] = language.toString()
                     temp[t][6] = banned.toString()
+                    temp[t][7] = referal.toString()
                     println("pos: ${temp[t][3]}")
                     t++
                 }
@@ -213,6 +215,30 @@ open class PostgreSQLJDBC {
 
             stmt = c.createStatement()
             val sql = "UPDATE CHATBOT2 set SPAMLIST = $banned where ID=$user_id;"
+            stmt!!.executeUpdate(sql)
+            c.commit()
+            stmt.close()
+            c.close()
+        } catch (e: Exception) {
+            System.err.println(e.javaClass.name + ": " + e.message)
+            System.exit(0)
+        }
+
+        println("Operation Update done successfully")
+    }
+
+    open fun update_referal(user_id: Long,referal: Int) {
+        var c: Connection? = null
+        var stmt: Statement? = null
+        try {
+            Class.forName("org.postgresql.Driver")
+            c = DriverManager
+                    .getConnection("jdbc:postgresql://localhost:5432/ChatBotDB", "postgres", "Q1w2e3r4t5")
+            c!!.autoCommit = false
+            println("Opened database successfully")
+
+            stmt = c.createStatement()
+            val sql = "UPDATE CHATBOT2 set REFERAL = $referal where ID=$user_id;"
             stmt!!.executeUpdate(sql)
             c.commit()
             stmt.close()

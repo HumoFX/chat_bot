@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="telegram_bot:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="c8115a49-d003-4416-bd8d-ce91ea42d051" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -37,10 +42,11 @@
     <session id="-1588134490">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="28" />
+          <entry key="project.closed" value="29" />
           <entry key="project.open.time.102" value="1" />
           <entry key="project.open.time.106" value="1" />
           <entry key="project.open.time.107" value="1" />
+          <entry key="project.open.time.108" value="1" />
           <entry key="project.open.time.112" value="1" />
           <entry key="project.open.time.113" value="1" />
           <entry key="project.open.time.121" value="1" />
@@ -59,44 +65,46 @@
           <entry key="project.open.time.82" value="1" />
           <entry key="project.open.time.85" value="1" />
           <entry key="project.open.time.87" value="2" />
-          <entry key="project.open.time.88" value="2" />
+          <entry key="project.open.time.88" value="3" />
           <entry key="project.open.time.89" value="2" />
           <entry key="project.open.time.91" value="3" />
           <entry key="project.open.time.94" value="2" />
           <entry key="project.open.time.95" value="1" />
           <entry key="project.open.time.96" value="1" />
           <entry key="project.open.time.97" value="2" />
-          <entry key="project.opened" value="35" />
+          <entry key="project.opened" value="37" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="java" value="16" />
-          <entry key="kt" value="19201" />
+          <entry key="kt" value="21746" />
           <entry key="txt" value="24" />
-          <entry key="xml" value="3" />
+          <entry key="xml" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JAVA" value="16" />
-          <entry key="Kotlin" value="19201" />
+          <entry key="Kotlin" value="21746" />
           <entry key="PLAIN_TEXT" value="24" />
-          <entry key="XML" value="3" />
+          <entry key="XML" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="6" />
-          <entry key="kt" value="6" />
+          <entry key="MF" value="1" />
+          <entry key="class" value="7" />
+          <entry key="kt" value="7" />
           <entry key="sql" value="1" />
           <entry key="txt" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="6" />
-          <entry key="Kotlin" value="6" />
+          <entry key="CLASS" value="7" />
+          <entry key="Kotlin" value="7" />
+          <entry key="Manifest" value="1" />
           <entry key="PLAIN_TEXT" value="4" />
           <entry key="Scratch" value="1" />
         </counts>
@@ -108,34 +116,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="44" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="1712" lean-forward="true" selection-start-line="1712" selection-end-line="1712" />
-              <folding>
-                <element signature="e#18#1192#0" expanded="true" />
-                <element signature="n#!!block;n#join#0;n#!!block;n#Bot#0" />
-                <element signature="n#!!block;n#end_conversation#0;n#!!block;n#Bot#0" />
-                <element signature="n#!!block;n#end_search#0;n#!!block;n#Bot#0" />
-                <element signature="n#!!block;n#button_group_1#0;n#!!block;n#Bot#0" />
-                <element signature="n#!!block;n#button_group_3#0;n#!!block;n#Bot#0" />
-              </folding>
+            <state relative-caret-position="357">
+              <caret line="78" column="50" selection-start-line="78" selection-start-column="50" selection-end-line="78" selection-end-column="50" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/PostgresDB.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="220" column="57" lean-forward="true" selection-start-line="220" selection-start-column="57" selection-end-line="220" selection-end-column="57" />
+            <state relative-caret-position="87">
+              <caret line="229" column="27" selection-start-line="229" selection-start-column="27" selection-end-line="229" selection-end-column="27" />
               <folding>
                 <element signature="e#18#204#0" expanded="true" />
               </folding>
@@ -146,7 +146,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
+            <state relative-caret-position="238">
               <caret line="14" selection-start-line="14" selection-end-line="14" />
               <folding>
                 <element signature="e#18#356#0" expanded="true" />
@@ -162,6 +162,32 @@
               <caret line="81" column="36" selection-start-line="81" selection-start-column="36" selection-end-line="81" selection-end-column="36" />
               <folding>
                 <element signature="e#20#490#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="87">
+              <caret line="387" column="75" selection-start-line="387" selection-start-column="75" selection-end-line="387" selection-end-column="75" />
+              <folding>
+                <element signature="n#!!block;n#language#1;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#profile_emojiM#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#profile_emojiJ#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#profile#1;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#ban#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#unban#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#warning#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#join#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#end_conversation#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#end_search#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#referal#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#balans#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#button_group_1#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#button_group_3#0;n#!!block;n#Bot#0" />
+                <element signature="n#!!block;n#button_group_4#0;n#!!block;n#Bot#0" />
               </folding>
             </state>
           </provider>
@@ -186,11 +212,11 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Hello.kt" />
         <option value="$PROJECT_DIR$/file1.txt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Server.kt" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Main.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Spam.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Chat_bot/PostgresDB.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -230,7 +256,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -263,6 +289,13 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
               <item name="Chat_bot" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="telegram_bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="telegram_bot" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="telegram_bot" type="b2602c69:ProjectViewProjectNode" />
@@ -307,7 +340,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -321,14 +354,19 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556212026935" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Telegram Desktop/yolochka" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557861007687" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Хумо\IdeaProjects\telegram_bot\src\main\resources" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -417,7 +455,9 @@
       <workItem from="1555913070554" duration="7272000" />
       <workItem from="1556174027517" duration="2771000" />
       <workItem from="1556947400829" duration="1049000" />
-      <workItem from="1557674200292" duration="9428000" />
+      <workItem from="1557674200292" duration="9493000" />
+      <workItem from="1557807875875" duration="24121000" />
+      <workItem from="1557855478555" duration="4739000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1555916480463</created>
@@ -433,17 +473,23 @@
       <option name="project" value="LOCAL" />
       <updated>1555997034184</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="first commit">
+      <created>1557687661676</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1557687661676</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="315101000" />
+    <option name="totallyTimeSpent" value="344026000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17170954" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1762481" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -453,14 +499,14 @@
       <window_info id="Learn" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3535188" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.29296234" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50075644" side_tool="true" weight="0.3289689" />
-      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49924356" weight="0.32569557" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49924356" visible="true" weight="0.48772505" />
       <window_info anchor="bottom" id="Java Enterprise" order="10" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.099836335" />
@@ -554,23 +600,6 @@
     <entry file="file://$PROJECT_DIR$/sample1.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="44" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="e#18#356#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Spam.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1173">
@@ -581,27 +610,63 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/PostgresDB.kt">
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa9252.24806/MainKt.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="220" column="57" lean-forward="true" selection-start-line="220" selection-start-column="57" selection-end-line="220" selection-end-column="57" />
+        <state relative-caret-position="87">
+          <caret line="387" column="75" selection-start-line="387" selection-start-column="75" selection-end-line="387" selection-end-column="75" />
           <folding>
-            <element signature="e#18#204#0" expanded="true" />
+            <element signature="n#!!block;n#language#1;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#profile_emojiM#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#profile_emojiJ#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#profile#1;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#ban#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#unban#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#warning#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#join#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#end_conversation#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#end_search#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#referal#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#balans#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#button_group_1#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#button_group_3#0;n#!!block;n#Bot#0" />
+            <element signature="n#!!block;n#button_group_4#0;n#!!block;n#Bot#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/Main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="1712" lean-forward="true" selection-start-line="1712" selection-end-line="1712" />
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
           <folding>
-            <element signature="e#18#1192#0" expanded="true" />
-            <element signature="n#!!block;n#join#0;n#!!block;n#Bot#0" />
-            <element signature="n#!!block;n#end_conversation#0;n#!!block;n#Bot#0" />
-            <element signature="n#!!block;n#end_search#0;n#!!block;n#Bot#0" />
-            <element signature="n#!!block;n#button_group_1#0;n#!!block;n#Bot#0" />
-            <element signature="n#!!block;n#button_group_3#0;n#!!block;n#Bot#0" />
+            <element signature="e#18#356#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="78" column="50" selection-start-line="78" selection-start-column="50" selection-end-line="78" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Chat_bot/PostgresDB.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="229" column="27" selection-start-line="229" selection-start-column="27" selection-end-line="229" selection-end-column="27" />
+          <folding>
+            <element signature="e#18#204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -611,11 +676,20 @@
     <states>
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
-          <artifact-editor />
+          <artifact-editor>
+            <show-content>
+              <type id="javaee-facet-resources" />
+              <type id="artifact" />
+              <type id="jpa-descriptors" />
+              <type id="library" />
+            </show-content>
+          </artifact-editor>
+          <last-edited>telegram_bot:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -663,6 +737,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
