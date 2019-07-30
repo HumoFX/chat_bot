@@ -6,19 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c8115a49-d003-4416-bd8d-ce91ea42d051" name="Default Changelist" comment="K">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Qiwi.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="c8115a49-d003-4416-bd8d-ce91ea42d051" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Bot.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/PostgresDB.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/PostgresDB.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Server.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Spam.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Chat_bot/Spam.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/Chat_bot/HelloTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/Chat_bot/HelloTest.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,12 +56,6 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-50" />
-    <option name="y" value="-26" />
-    <option name="width" value="1060" />
-    <option name="height" value="499" />
-  </component>
   <component name="ProjectId" id="1Oj16gsdLdZykwRPCsHVhG9WbjK" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -111,7 +94,7 @@
     <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -238,7 +221,7 @@
       <workItem from="1563303471030" duration="1016000" />
       <workItem from="1563985949659" duration="1469000" />
       <workItem from="1564378040730" duration="2392000" />
-      <workItem from="1564476090446" duration="2928000" />
+      <workItem from="1564476090446" duration="3664000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1555916480463</created>
@@ -268,7 +251,14 @@
       <option name="project" value="LOCAL" />
       <updated>1557862717366</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="K">
+      <created>1564512624221</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1564512624221</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -297,7 +287,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="K" />
+    <option name="LAST_COMMIT_MESSAGE" value="K" />
   </component>
   <component name="masterDetails">
     <states>
