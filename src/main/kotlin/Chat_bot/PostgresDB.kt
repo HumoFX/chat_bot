@@ -76,9 +76,9 @@ open class PostgreSQLJDBC {
             stmt = c.createStatement()
             var sql: String
             if (text == "male") {
-                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY) " + "VALUES ($user_id,'male',$position,0,$language,$banned,0,0,$referal,'PUSTO','$profilename','PUSTO','PUSTO');"
+                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY,BALANCE) " + "VALUES ($user_id,'male',$position,0,$language,$banned,0,0,$referal,'PUSTO','$profilename','PUSTO','PUSTO',0);"
             } else {
-                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY) " + "VALUES ($user_id,'female',$position,0,$language,$banned,0,0,$referal,'PUSTO','$profilename','PUSTO','PUSTO');"
+                sql = "INSERT INTO CHATBOT2 (ID,GENDER,POSITION,AGE,LANGUAGE,SPAMLIST,PREMIUM,TEAM,REFERAL,USERNAME,PROFILENAME,CITY,COUNTRY,BALANCE) " + "VALUES ($user_id,'female',$position,0,$language,$banned,0,0,$referal,'PUSTO','$profilename','PUSTO','PUSTO',0);"
             }
             stmt.executeUpdate(sql)
 
@@ -124,6 +124,7 @@ open class PostgreSQLJDBC {
                     val language = rs.getInt("language")
                     val banned = rs.getInt("spamlist")
                     var referal = rs.getInt("referal")
+                    var balance = rs.getInt("balance")
                     temp[t][0] = id.toString()
                     temp[t][1] = gender
                     temp[t][3] = position.toString()
@@ -131,6 +132,7 @@ open class PostgreSQLJDBC {
                     temp[t][5] = language.toString()
                     temp[t][6] = banned.toString()
                     temp[t][7] = referal.toString()
+                    temp[t][8] = balance.toString()
                     println("pos: ${temp[t][3]}")
                     t++
                 }
@@ -287,6 +289,31 @@ open class PostgreSQLJDBC {
 
             stmt = c.createStatement()
             val sql = "UPDATE CHATBOT2 set LANGUAGE = $language where ID=$user_id;"
+            stmt!!.executeUpdate(sql)
+            c.commit()
+            stmt.close()
+            c.close()
+        } catch (e: Exception) {
+            System.err.println(e.javaClass.name + ": " + e.message)
+            System.exit(0)
+        }
+
+        println("Operation Update done successfully")
+    }
+
+
+    open fun update_balance(user_id: Long,balance: Int) {
+        var c: Connection? = null
+        var stmt: Statement? = null
+        try {
+            Class.forName("org.postgresql.Driver")
+            c = DriverManager
+                    .getConnection("jdbc:postgresql://localhost:5432/ChatBotDB", "postgres", "Q1w2e3r4t5")
+            c!!.autoCommit = false
+            println("Opened database successfully")
+
+            stmt = c.createStatement()
+            val sql = "UPDATE CHATBOT2 set BALANCE = $balance where ID=$user_id;"
             stmt!!.executeUpdate(sql)
             c.commit()
             stmt.close()

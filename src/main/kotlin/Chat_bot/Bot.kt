@@ -17,6 +17,14 @@ import java.io.*
 import kotlin.collections.ArrayList
 
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
+import org.telegram.telegrambots.meta.api.objects.PhotoSize
+import java.util.Comparator
+import com.google.common.graph.ElementOrder.sorted
+import com.google.common.graph.ElementOrder.sorted
+//import org.junit.internal.matchers.ThrowableMessageMatcher.hasMessage
+
+
 
 
 
@@ -29,6 +37,7 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
 
 
 class Bot : TelegramLongPollingBot() {
+    var qiwi = Qiwi()
     var abc = PostgreSQLJDBC()
     var file = Spam()
     val partner_searchM = arrayListOf<Int>()
@@ -39,6 +48,7 @@ class Bot : TelegramLongPollingBot() {
     val partner_searchJE = arrayListOf<Int>()
     val connected_userM = arrayListOf<Long>()
     val connected_userJ = arrayListOf<Long>()
+  //  var payment_data: Array<Array<String>> = Array(100, { Array(4, {"0"}) })
     var users : MutableMap<Long,String> = hashMapOf()
     var users_pos : MutableMap<Long,Int> = hashMapOf()
     var profile : MutableMap<Long,String> = hashMapOf()
@@ -48,6 +58,9 @@ class Bot : TelegramLongPollingBot() {
     var user_banned : MutableMap<Long,Int> = hashMapOf()
     var user_referals : MutableMap<Long,Int> = hashMapOf()
     var user_registor: MutableMap<Long,Int> = hashMapOf()
+    var user_ostatok: MutableMap<Long,Int> = hashMapOf()
+    var user_balance: MutableMap<Long,Int> = hashMapOf()
+    var user_qiwi: MutableMap<Long,String> = hashMapOf()
     var file_iterator = 0
     var male_size = 0
     var female_size = 0
@@ -67,6 +80,7 @@ class Bot : TelegramLongPollingBot() {
     val database_search_size = database_search[0][2].toInt()
     val database_connected_size = database_connected[0][2].toInt()
     var all_size = database_size
+    var file_id = ""
    // val users_connection :MutableMap<Long,String>=
     override fun getBotToken(): String {
         return "639145492:AAHVTi5VaxKzxUWa8C65a2ubMUpXmrTfF20"
@@ -102,6 +116,7 @@ class Bot : TelegramLongPollingBot() {
                     user_banned.put(database[i][0].toLong(),database[i][6].toInt())
                     user_referals.put(database[i][0].toLong(),database[i][7].toInt())
                     users_map.put(database[i][0].toLong(),database[i])
+                    user_balance.put(database[i][0].toLong(),database[i][8].toInt())
                 }
 
 
@@ -203,7 +218,38 @@ class Bot : TelegramLongPollingBot() {
         language.add("\uD83C\uDDFA\uD83C\uDDFF")
         language.add("\uD83C\uDDEC\uD83C\uDDE7")
         if (update != null) {
+            if (update.hasMessage() && update.message.hasPhoto()) {
+                // Message contains photo
+                // Set variables
+                val chat_id = update.message.chatId
 
+                val photos = update.message.photo
+                if(chat_id.toInt() == 299384140) {
+                    file_id = photos.stream()
+                            //  .sorted(Comparator.comparing(PhotoSize::getFileSize).reversed())
+                            .findFirst()
+                            .orElse(null).fileId
+                }
+                val f_width = photos.stream()
+                       // .sorted(Comparator.comparing(PhotoSize::getFileSize).reversed())
+                        .findFirst()
+                        .orElse(null).width!!
+                val f_height = photos.stream()
+                        //.sorted(Comparator.comparing(PhotoSize::getFileSize).reversed())
+                        .findFirst()
+                        .orElse(null).height!!
+ /*               val caption = "file_id: " + f_id + "\nwidth: " + Integer.toString(f_width) + "\nheight: " + Integer.toString(f_height)
+                val msg = SendPhoto()
+                        .setChatId(chat_id)
+                        .setPhoto(f_id)
+                        .setCaption(caption)// в caption записываем описание фото!(доработать задержку)
+                try {
+                    execute(msg) // Call method to send the message
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }*/
+
+            }
             if (update.hasMessage() && update.message.hasText()) {
 
                 val user_id = update.message.chatId
@@ -262,7 +308,7 @@ class Bot : TelegramLongPollingBot() {
                         else
                         {
                             language(user_id)
-                            parse_link(message_text)
+                            parse_link(user_id,message_text)
                         }
 
                     } else {
@@ -331,6 +377,23 @@ class Bot : TelegramLongPollingBot() {
                         if (tmp2 == 5) {
                             warning(user_id, message_text)
                         }
+                        if (tmp2 == 6) {
+                            save_qiwi(user_id,message_text)
+                        }
+                        if (tmp2 == 7) {
+                            get_balance(user_id,message_text)
+                            button_group_5(message_text, user_id)
+                        }
+                        if (tmp2 == 8) {
+                            button_group_5(message_text, user_id)
+                        }
+                        if (tmp2 == 9) {
+                            posting(user_id,file_id,message_text)
+                            file_id=""
+                        }
+                        if (tmp2 == 10) {
+                            button_group_5(message_text, user_id)
+                        }
                         println("userposremove ${users_pos.keys}  ${users_pos.values}")
                         connection(user_id, message_text)
                         connected(user_id, message_text, user_firstname)
@@ -351,15 +414,6 @@ class Bot : TelegramLongPollingBot() {
 
             if (update.hasCallbackQuery()) {
                 // Set variables
-                val answer = AnswerCallbackQuery()
-                answer.callbackQueryId = update.callbackQuery.id
-                answer.text = "Принято!!"
-                answer.showAlert = true
-                try {
-                    execute(answer)
-                } catch (e: TelegramApiException) {
-                    e.printStackTrace()
-                }
 
                 val call_data = update.callbackQuery.data
                 val chat_id = update.callbackQuery.message.chatId
@@ -402,6 +456,16 @@ class Bot : TelegramLongPollingBot() {
                     } catch (e: TelegramApiException) {
                         e.printStackTrace()
                     }
+                    val answer = AnswerCallbackQuery()
+                    answer.callbackQueryId = update.callbackQuery.id
+                    answer.text = "Принято!!"
+                    answer.showAlert = false
+                    try {
+                        execute(answer)
+                    } catch (e: TelegramApiException) {
+                        e.printStackTrace()
+                    }
+
                 }
                 if (call_data == "female")
                 {
@@ -434,8 +498,84 @@ class Bot : TelegramLongPollingBot() {
                     } catch (e: TelegramApiException) {
                         e.printStackTrace()
                     }
+                    val answer = AnswerCallbackQuery()
+                    answer.callbackQueryId = update.callbackQuery.id
+                    answer.text = "Принято!!"
+                    answer.showAlert = false
+                    try {
+                        execute(answer)
+                    } catch (e: TelegramApiException) {
+                        e.printStackTrace()
+                    }
+
                 }
-                if(call_data!="male"&&call_data!="female") {
+                else if(call_data=="rub")
+                {
+                    users_pos.replace(chat_id,6)
+                    var text = "Введите свой Qiwi кошелек( c + ).Пример: +998901234567"
+                    var text1 = "У вас недостаточно средств на балансе"
+                    var lng = user_lang.get(chat_id)
+                    if(lng==1)
+                    {
+
+                    }
+                    if(lng==2)
+                    {
+
+                    }
+                    var user = user_balance.get(chat_id)
+                    if(user!=null)
+                    {
+                        if (user >= 30) {
+                            val new_message = SendMessage()
+                                    .setChatId(chat_id)
+                                    .setText("$text")
+                            try {
+                                execute(new_message)
+                            } catch (e: TelegramApiException) {
+                                e.printStackTrace()
+                            }
+                            users_pos.replace(chat_id,6)
+
+                        }
+                    }
+                    else
+                    {
+                            val answer = AnswerCallbackQuery()
+                            answer.callbackQueryId = update.callbackQuery.id
+                            answer.text = text1
+                            answer.showAlert = true
+                            try {
+                                execute(answer)
+                            } catch (e: TelegramApiException) {
+                                e.printStackTrace()
+                            }
+                            join(chat_id)
+                    }
+                    var new_delete = DeleteMessage()
+                            .setChatId(chat_id)
+                            .setMessageId(message_id)
+                    try {
+                        execute(new_delete)
+                    } catch (e: TelegramApiException) {
+                        e.printStackTrace()
+                    }
+                }
+                else if(call_data=="back")
+                {
+                    join(chat_id)
+                }
+                else if(call_data!="male"&&call_data!="female") {
+                    val answer = AnswerCallbackQuery()
+                    answer.callbackQueryId = update.callbackQuery.id
+                    answer.text = "Принято!!"
+                    answer.showAlert = false
+                    try {
+                        execute(answer)
+                    } catch (e: TelegramApiException) {
+                        e.printStackTrace()
+                    }
+
                     var gender = users.get(chat_id)
                     var position = users_pos.get(chat_id)
                     var lang = user_lang.get(chat_id)
@@ -507,6 +647,153 @@ class Bot : TelegramLongPollingBot() {
             }
         }
     }
+
+
+    fun posting(user_id: Long,f_id: String,message_text: String)
+    {
+        var i =0
+        while(i<database_size)
+        {
+            var new_message = SendPhoto()
+                    .setChatId("${database[i][0]}")
+                    .setPhoto(f_id)
+                    .setCaption(message_text)
+            try {
+                execute(new_message)
+            } catch (e: TelegramApiException) {
+                e.printStackTrace()
+            }
+            i++
+        }
+
+        join(user_id)
+    }
+
+    fun get_balance(user_id: Long,message_text: String)
+    {
+        var text = "Не правильно введены данные.Попробуйте снова"
+        var text1 = "Принято!"
+        var balance = user_balance.get(user_id)
+        if(balance!=null)
+        {
+            var int = message_text.toInt()
+            if (balance < int)
+            {
+                val new_message = SendMessage()
+                        .setChatId(user_id)
+                        .setText("$text")
+                try {
+                    execute(new_message)
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }
+
+            }
+            else{
+                user_ostatok.put(user_id,message_text.toInt())
+                val new_message = SendMessage()
+                        .setChatId(user_id)
+                        .setText("$text1")
+                try {
+                    execute(new_message)
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }
+                payment_get_info(user_id)
+                payment_data_save_file(user_id,message_text)
+                users_pos.replace(user_id,8)
+            }
+        }
+    }
+
+    fun payment_data_save_file(user_id: Long,message_text: String)
+    {
+        var document_name = "$user_id"
+            file.write("$document_name",message_text,user_id)
+/*        val initialFile = File("C:\\Users\\HumoFX\\Documents\\TelegramFiles\\$document_name.txt")
+        val targetStream = FileInputStream(initialFile)
+        if (document_name != null)
+        {
+
+            var document = SendDocument()
+
+                    .setChatId(299384140)
+                    .setDocument("$document_name.txt",targetStream)
+
+            try {
+                execute(document)
+            } catch (e: TelegramApiException) {
+                e.printStackTrace()
+            }
+
+
+
+        }*/
+    }
+
+    fun payment_data_send_file(user_id: Long,message_text: String)
+    {
+        var document_name = "$user_id"
+        file.write("$document_name",message_text,user_id)
+        val initialFile = File("C:\\Users\\HumoFX\\Documents\\TelegramFiles\\$document_name.txt")
+        val targetStream = FileInputStream(initialFile)
+        if (document_name != null)
+        {
+
+            var document = SendDocument()
+
+                    .setChatId(299384140)
+                    .setDocument("$document_name.txt",targetStream)
+
+            try {
+                execute(document)
+            } catch (e: TelegramApiException) {
+                e.printStackTrace()
+            }
+            join(user_id)
+
+
+
+        }
+    }
+
+    fun save_qiwi(user_id: Long,message_text: String)
+    {
+        if(message_text.startsWith("+")) {
+            user_qiwi.put(user_id, message_text)
+            payment_get_info(user_id)
+            payment_data_save_file(user_id,message_text)
+            users_pos.replace(user_id,10)
+        }
+        else {
+            var text = "Не правильно введен киви кошелек!"
+            val new_message = SendMessage()
+                    .setChatId(user_id)
+                    .setText("$text")
+            try {
+                execute(new_message)
+            } catch (e: TelegramApiException) {
+                e.printStackTrace()
+            }
+        }
+
+    }
+
+
+    fun get_amount(user_id: Long,message_text: String)
+    {
+        var text = "Введите сумму, которую хотите вывести!"
+        val new_message = SendMessage()
+                .setChatId(user_id)
+                .setText("$text")
+        try {
+            execute(new_message)
+        } catch (e: TelegramApiException) {
+            e.printStackTrace()
+        }
+        users_pos.replace(user_id,7)
+    }
+
     fun gender(user_id: Long)
     {
         var text = "*Добро пожаловать в анонимный чат NONAME!*"+ "\n _Выберите ваш пол:_ "
@@ -895,6 +1182,7 @@ class Bot : TelegramLongPollingBot() {
         var button_text5 = "BAN"
         var button_text6 = "UNBAN"
         var button_text7 = "WARNING"
+        var button_text8 = "POSTING"
         var lang = user_lang.get(user_id)
         println("lang $lang")
         if(lang!=null)
@@ -938,6 +1226,7 @@ class Bot : TelegramLongPollingBot() {
         val keyboardSecondRow = KeyboardRow()
         val keyboardThirdRow = KeyboardRow()
         val keyboardFourthRow = KeyboardRow()
+        val keyboardFivthRow = KeyboardRow()
         val profilename = profile.get(user_id)
         keyboardFirstRow.add(KeyboardButton("$button_text1"))
         keyboardSecondRow.add(KeyboardButton("$profilename"))
@@ -947,12 +1236,14 @@ class Bot : TelegramLongPollingBot() {
         keyboardFourthRow.add(KeyboardButton("$button_text5"))
         keyboardFourthRow.add(KeyboardButton("$button_text6"))
         keyboardFourthRow.add(KeyboardButton("$button_text7"))
+        keyboardFivthRow.add(KeyboardButton("$button_text8"))
         keyboard.add(keyboardFirstRow)
         keyboard.add(keyboardSecondRow)
         keyboard.add(keyboardThirdRow)
         if (user_id.toInt()==299384140)
         {
             keyboard.add(keyboardFourthRow)
+            keyboard.add(keyboardFivthRow)
         }
 
         replyKeyboardMarkup.keyboard = keyboard
@@ -969,6 +1260,38 @@ class Bot : TelegramLongPollingBot() {
        // users_pos.put(user_id,0)
         //users_pos[user_id]=0
        // println("pos: ${users_pos.get(user_id)}")
+    }
+    fun payment_get_info (user_id: Long)
+    {
+        var button_text1 = "Продолжить"
+   //     var button_text2 = "Изменить"
+        var button_text3 = "Отмена"
+        val replyKeyboardMarkup = ReplyKeyboardMarkup()
+        val sendMessage = SendMessage()
+                .setChatId(user_id)
+                .setText("Продолжить?")
+        sendMessage.setReplyMarkup(replyKeyboardMarkup)
+        replyKeyboardMarkup.selective = true
+        replyKeyboardMarkup.resizeKeyboard = true
+        replyKeyboardMarkup.oneTimeKeyboard = false
+        val keyboard = ArrayList<KeyboardRow>()
+        val keyboardFirstRow = KeyboardRow()
+        val keyboardSecondRow = KeyboardRow()
+        keyboardFirstRow.add(KeyboardButton("$button_text1"))
+  //      keyboardFirstRow.add(KeyboardButton("$button_text2"))
+        keyboardSecondRow.add(KeyboardButton("$button_text3"))
+        keyboard.add(keyboardFirstRow)
+        keyboard.add(keyboardSecondRow)
+
+        replyKeyboardMarkup.keyboard = keyboard
+        try
+        {
+            execute(sendMessage)
+        }
+        catch (e: TelegramApiException)
+        {
+            e.printStackTrace()
+        }
     }
 
     fun end_conversation(user_id: Long){
@@ -1090,7 +1413,7 @@ class Bot : TelegramLongPollingBot() {
             e.printStackTrace()
         }
     }
-    fun parse_link(message_text: String)
+    fun parse_link(user_id: Long,message_text: String)
     {
         if(message_text.startsWith("/start ")) {
             var get_user_id = message_text
@@ -1102,7 +1425,18 @@ class Bot : TelegramLongPollingBot() {
                 abc.update_referal(time.toLong(), iter + 1)
             }
 
-            var text = "Вы получили 2.5endorphins за приглашение участника"
+            var text = "Вы получили 100 rub за приглашение участника"
+            var balance = user_balance.get(time.toLong())
+            if(balance!=null)
+            {
+                var integer = balance.plus(100)
+
+                    user_balance.replace(time.toLong(),integer)
+
+            }
+            else user_balance.put(time.toLong(),100)
+
+
             var message = SendMessage()
                     .setChatId(time)
                     .setText(text)
@@ -1118,14 +1452,18 @@ class Bot : TelegramLongPollingBot() {
 
         var iter=user_referals.get(user_id)
         var coin=0.0
-        if(iter!=null)
+        var balance = user_balance.get(user_id)
+        println("$ = $balance")
+        if(iter!=null && balance!=null)
         {
-            coin=iter*2.5
+            coin =balance.toDouble()
+            println("$ = $balance")
         }
 
-        var text="\"Ваш баланс составляет $coin endorphins\\n Для вывода необходимо 50 endorphins\""
-        var button_text1 = "Вывод руб"
-        var button_text2 = "Вывод сум"
+
+        var text="Ваш баланс составляет $coin rub\n Для вывода необходимо 30 rub"
+        var button_text1 = "Вывод"
+        var button_text2 = "Отмена"
         var lang = user_lang.get(user_id)
         if(lang!=null)
         {
@@ -1135,40 +1473,38 @@ class Bot : TelegramLongPollingBot() {
             }
             if(lang==1)
             {
-                text="*Аноним чатимизга хуш келибсиз!*"+ "\n_Жинсингизни танланг:_"
-                button_text1="Эркак \uD83D\uDC81\u200D♂️"
-                button_text2="Айол \uD83D\uDC81\u200D♀️"
+                text="Сизнинг балансингизда $coin rub \n Пулнингизни чикариб олиш учун балансингизда 30 rub бо'лиши зарур"
+
             }
             if(lang==2)
             {
-                text = "*Welcome to our anonymous chat* "+ "\n_Choose ur gender:_"
-                button_text1 = "Male \uD83D\uDC81\u200D♂️"
-                button_text2 = "Female \uD83D\uDC81\u200D♀️"
+                text = "You have $coin rub \n Minimum output is 30 rub"
+            }
+            val message = SendMessage()
+                    .setChatId(user_id)
+                    .setParseMode("Markdown")
+                    .setText("*${text}*")
+            val markupInline = InlineKeyboardMarkup()
+            val rowsInline = ArrayList<List<InlineKeyboardButton>>()
+            val rowInline = ArrayList<InlineKeyboardButton>()
+            rowInline.add(InlineKeyboardButton().setText("$button_text1").setCallbackData("rub"))
+            rowInline.add(InlineKeyboardButton().setText("$button_text2").setCallbackData("back"))
+            // Set the keyboard to the markup
+            rowsInline.add(rowInline)
+            // Add it to the message
+            markupInline.keyboard = rowsInline
+            message.replyMarkup = markupInline
+            try {
+                execute(message)
+                //      execute(delmessage)
+            }
+            catch (e: TelegramApiException){
+                e.printStackTrace()
             }
         }
-
-        val message = SendMessage() // Create a message object object
-                .setChatId(user_id)
-                .setParseMode("Markdown")
-                .setText("$text")
-        val markupInline = InlineKeyboardMarkup()
-        val rowsInline = ArrayList<List<InlineKeyboardButton>>()
-        val rowInline = ArrayList<InlineKeyboardButton>()
-        rowInline.add(InlineKeyboardButton().setText("$button_text1").setCallbackData("rub"))
-        rowInline.add(InlineKeyboardButton().setText("$button_text2").setCallbackData("sum"))
-        // Set the keyboard to the markup
-        rowsInline.add(rowInline)
-        // Add it to the message
-        markupInline.keyboard = rowsInline
-        message.replyMarkup = markupInline
-        try {
-            execute(message) // Sending our message object to user
-        } catch (e: TelegramApiException) {
-            e.printStackTrace()
-        }
     }
-
-    private fun button_group_0(message_text: String, user_id: Long) {
+    private fun button_group_0(message_text: String, user_id: Long)
+    {
         var button_text1 = "Найти собеседника \uD83D\uDD0E"
         var button_text2 = "Статистика \uD83D\uDCCA"
         var button_text3 = "Правила \uD83D\uDCDA"
@@ -1324,10 +1660,10 @@ class Bot : TelegramLongPollingBot() {
                 "$button_text3"->
                 {
                     //Здесь будут правила
-
+                    var text = qiwi.payment()
                     var message = SendMessage()
                             .setChatId(user_id)
-                            .setText("В стадии разработки!")
+                            .setText("$text")
                     try {
                         execute(message)
                     }
@@ -1466,6 +1802,7 @@ class Bot : TelegramLongPollingBot() {
                 }
                 "Баланс"->
                 {
+                    balans(user_id,message_text)
                     var test = users_map.get(user_id)
                     if (test!=null){
                     println("TEST ${test[1]}")}
@@ -1572,7 +1909,7 @@ class Bot : TelegramLongPollingBot() {
                     document_name=file_nameM.get(user_id)
                 }
                 file.write("${document_name.toString()}","- нажал на СПАМ",user_id)
-                val initialFile = File("C:\\Users\\Хумо\\Documents\\TelegramFiles\\$document_name.txt")
+                val initialFile = File("C:\\Users\\HumoFX\\Documents\\TelegramFiles\\$document_name.txt")
                 val targetStream = FileInputStream(initialFile)
                 if (document_name != null)
                 {
@@ -1662,12 +1999,71 @@ class Bot : TelegramLongPollingBot() {
                 }
 
             }
+            "POSTING"->
+            {
+                users_pos.replace(user_id,9)
+                abc.update(user_id,9)
+                val message = SendMessage()
+                        .setChatId(user_id)
+                        .setText("Do a new post")
+                try {
+                    execute(message) // Sending our message object to user
+                } catch (e: TelegramApiException) {
+                    e.printStackTrace()
+                }
+            }
         }
     }
+    private fun button_group_5(message_text: String,user_id: Long)
+    {
+        var button1 = "Продолжить"
+        var button2 = "Изменить"
+        var button3 = "Отмена"
+        when(message_text)
+        {
+            button1->
+            {
+                var pos = users_pos.get(user_id)
+                if(pos==10)
+                {
+                    get_amount(user_id,message_text)
+
+                }
+                if(pos==8)
+                {
+                    var ost = user_ostatok.get(user_id)
+                    var balance = user_balance.get(user_id)
+                    var ostatok = balance!! - ost!!
+                    user_balance.replace(user_id,ostatok)
+                    var text = "Ваш запрос в обработке"
+                    var message =  SendMessage()
+                            .setChatId(user_id)
+                            .setText("$text")
+                    try
+                    {
+                        execute(message)
+                    }
+                    catch (e: TelegramApiException)
+                    {
+                        e.printStackTrace()
+                    }
+                    payment_data_send_file(user_id,message_text)
+
+                }
+            }
+            button2->
+            {
+
+            }
+            button3->
+            {
+                join(user_id)
+            }
+        }
+    }
+
     fun connection(user_id: Long, message_text: String) {
 
-        var i = 0
-        var j = 0 //hh
 
         println("Array : ${partner_searchJ.size}  ${partner_searchM.size}")
         if (partner_searchJ.size != 0 && partner_searchM.size !=0) {

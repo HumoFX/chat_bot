@@ -42,7 +42,7 @@ open class Spam {
 
             println(ex.message)
         }*/
-        var log = File("C:\\Users\\Хумо\\Documents\\TelegramFiles\\$name.txt")
+        var log = File("C:\\Users\\HumoFX\\Documents\\TelegramFiles\\$name.txt")
         try {
 
             if (log.exists() === false) {

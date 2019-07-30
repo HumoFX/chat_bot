@@ -19,6 +19,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.qiwi</groupId>
+            <artifactId>bill-payments-java-sdk</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-templ-freemarker</artifactId>
             <version>${vertx.version}</version>
@@ -54,6 +59,16 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.toile-libre.libe</groupId>
+            <artifactId>curl</artifactId>
+            <version>0.0.31</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
         </dependency>
     </dependencies>
 
